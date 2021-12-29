@@ -14,9 +14,9 @@ MyGame::MyGame()
     
 }
 
+//load in json and save it as out own data structure, much faster
 void MyGame::parseJsonToMap(Json::Value &data, std::map<std::string,Frame> &frames)
 {
-    //"IDLE_E0000"
     Json::Value f = (data)["frames"];
     for( Json::Value::const_iterator itr = f.begin() ; itr != f.end() ; itr++ )
     {
@@ -30,9 +30,8 @@ void MyGame::parseJsonToMap(Json::Value &data, std::map<std::string,Frame> &fram
         frame.h = list["h"].asInt();
         
         
-        Json::Value sourceSize = frameObj["sourceSize"];
-        frame.destW = frame.w;//sourceSize["w"].asInt();
-        frame.destH = frame.h;//sourceSize["h"].asInt();
+        frame.destW = frame.w;
+        frame.destH = frame.h;
         
         frames.emplace(key, frame);
                
@@ -57,7 +56,7 @@ void MyGame::onloaded()
     numRows = mapH / blockSize;
     numCols = mapW / blockSize;
     
-    
+    //save json and texture in map for later retrival
     if(m.find( "man" ) == m.end())
     {
         AtlasObj *o = new AtlasObj();
@@ -76,6 +75,7 @@ void MyGame::onloaded()
     //std::cout << "this is my json " <<  << std::endl;
 }
 /**/
+//the sorting funciton for later
 struct
 {
     inline bool operator() (const Man* struct1, const Man* struct2)
@@ -84,6 +84,8 @@ struct
     }
 } sortFnctn;
 
+
+//create gameobjects, store them in row/col map->vectors
 void MyGame::begin() {
     /* */
     int i = 0;
@@ -122,11 +124,7 @@ void MyGame::begin() {
             {
                 found = true;
             }
-            
-            
-            //gridMap[key].push_back(o);
-            
-            
+
         }
         
         
@@ -153,6 +151,7 @@ void MyGame::begin() {
 
     //std::sort(arr.begin(), arr.end(), sortFnctn);
     
+    //create hero, apart from others
     hero = new Man(m["man"], mapW / 2,mapH / 2, 50, 50);
     std::cout << "hero at " << mapW / 2 << " " << mapH / 2 << std::endl;
     hero->x = mapW / 2;
@@ -222,18 +221,11 @@ void MyGame::update(int dt)
         return;
     }
     
-    /*
-    std::map<std::string, std::vector<Man*>>::iterator it;
-    for (it = gridMap.begin(); it != gridMap.end(); it++)
-    {
-        it->second.clear();
-    }
-     */
-    //gridMap.clear();
+   
 
     int i = 0;
     
-    
+    //the delta array is populated when a game object is moved. we check here if he was moved to a different tile
     for (i = 0; i < deltaArr.size(); i++) {
         Man *o = deltaArr[i];
         
@@ -273,7 +265,7 @@ void MyGame::update(int dt)
             o->row = row;
             o->col = col;
             
-            
+            //we might end up in a brand new tile
             key = std::to_string(row) + "_" + std::to_string(col);
             //if key does not exist
             if(gridMap.find(  key ) == gridMap.end()){
@@ -352,7 +344,9 @@ void MyGame::draw(int dt)
 }
 
 
-
+//go over objects near the player. move them back if they are in radiuos.
+//recursively have them do the same.
+//place moved objects in deltaArray
 void MyGame::moveParticles(Man *o, bool fromHero) {
     
     int row;
