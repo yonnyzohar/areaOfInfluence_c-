@@ -34,6 +34,9 @@ protected:
     SDL_Rect destRect;
     AtlasObj *atlas;
     int frameCounter = 0;
+    int destW;
+    int destH;
+    int timeCounter = 0;
     //SDL_Texture *myTexture;
    // Json::Value *myData;
     

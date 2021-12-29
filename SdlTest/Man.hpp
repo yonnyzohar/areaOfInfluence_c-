@@ -27,6 +27,7 @@ public:
     bool inRange;
     bool moved;
     bool walking;
+    int yonny = 400;
     
     /*
     bool operator==( Man* rhs){

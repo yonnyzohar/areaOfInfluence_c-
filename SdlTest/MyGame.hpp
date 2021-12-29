@@ -44,13 +44,14 @@ public:
     int numRows;
     int numCols;
     std::map<std::string, std::vector<Man*>> gridMap;
-    std::vector<Man*> arr;
+    std::vector<Man*> deltaArr;
     Man* hero;
     bool ready = false;
     void moveParticles(Man* o, bool fromHero);
       
 private:
     void begin();
+    
 };
 
 #endif /* MyGame_hpp */

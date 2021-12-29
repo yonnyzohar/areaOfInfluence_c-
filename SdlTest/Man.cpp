@@ -9,8 +9,8 @@
 
 void Man::update(int offsetX, int offsetY)
 {
-    destRect.x = x + offsetX;
-    destRect.y = y + offsetY;
-    destRect.w = 50.0f;
-    destRect.h = 100.0f;
+    destRect.x = (int)(x + offsetX);
+    destRect.y = (int)(y + offsetY);
+    destRect.w = (int)destW;
+    destRect.h = (int)destH;
 }

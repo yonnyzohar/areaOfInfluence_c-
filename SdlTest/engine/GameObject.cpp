@@ -27,8 +27,10 @@ void GameObject::setAnimFrame(std::string _name) {
        // std::cout << id << " " << _name << " is not equal to " << prevState << std::endl;
         frameCounter = 0;
     } else {
-       // std::cout << id << " " << _name << " is equal to " << prevState << std::endl;
+
         frameCounter++;
+       // std::cout << id << " " << _name << " is equal to " << prevState << std::endl;
+        
     }
     std::string key =_name + Utilities::getZeros(frameCounter);
     if(atlas->frames.find(  key ) != atlas->frames.end()){
@@ -40,6 +42,8 @@ void GameObject::setAnimFrame(std::string _name) {
         srcRect.y = frame.y;
         srcRect.w = frame.w;
         srcRect.h = frame.h;
+        destW = frame.destW;
+        destH = frame.destH;
     }
     else
     {
@@ -53,6 +57,8 @@ void GameObject::setAnimFrame(std::string _name) {
         srcRect.y = frame.y;
         srcRect.w = frame.w;
         srcRect.h = frame.h;
+        destW = frame.destW;
+        destH = frame.destH;
     }
 
 
@@ -62,10 +68,10 @@ void GameObject::setAnimFrame(std::string _name) {
 
 void GameObject::update()
 {
-    destRect.x = x ;
-    destRect.y = y ;
-    destRect.w = 50.0f;
-    destRect.h = 100.0f;
+    destRect.x = (int)x ;
+    destRect.y = (int)y ;
+    destRect.w = destW;
+    destRect.h = destH;
 }
 void GameObject::render(int dt)
 {
